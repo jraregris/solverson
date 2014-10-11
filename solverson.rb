@@ -1,6 +1,10 @@
 class Solverson
-  def self.solve_row puzzle
+  def self.solve_row puzzle  
     clue, row = puzzle
+    self.solve_clue_and_row(clue, row)
+  end
+
+  def self.solve_clue_and_row clue, row
     if clue.length == 1
       if clue.first == 0
         return fill_X(row)
@@ -10,7 +14,22 @@ class Solverson
       end
 
       if clue_is_satisfied(clue.first, row)
-      return fill_empty_with_X(row)
+        return fill_empty_with_X(row)
+      end
+
+      if row_is_padded(clue.first, row)
+        front_pad = []
+        back_pad = []
+
+        while(row.first == :X)
+          front_pad << row.shift
+        end
+
+        while(row.last == :X)
+          back_pad << row.pop
+        end
+
+        return front_pad + self.solve_clue_and_row(clue, row) + back_pad
       end
     end
 
@@ -35,6 +54,10 @@ class Solverson
     cluestring = 'O'*clue
     rowstring = row.map { |c| c.to_s }.join
     rowstring.include? cluestring
+  end
+
+  def self.row_is_padded(clue, row)
+    row.first == :X || row.last == :X
   end
 end
 
@@ -66,6 +89,11 @@ describe Solverson do
 
     it '1[ |O| ] -> [X|O|X]' do
       puzzle = [[1], [:_, :O, :_]]
+      Solverson.solve_row(puzzle).must_equal [:X, :O, :X]
+    end
+
+    it '1[X| |X] -> [X|O|X]' do
+      puzzle = [[1], [:X, :_, :X]]
       Solverson.solve_row(puzzle).must_equal [:X, :O, :X]
     end
   end
