@@ -5,19 +5,20 @@ class Solverson
   end
 
   def self.solve_clue_and_row clue, row
-    if clue.length == 1
-      if clue.first == 0
+    if clue.kind_of?(Enumerator.class) == false || clue.length == 1
+      clue = [clue].flatten.first
+      if clue == 0
         return fill_X(row)
       end
-      if clue.first == row.length
+      if clue == row.length
         return fill_O(row)
       end
 
-      if clue_is_satisfied(clue.first, row)
+      if clue_is_satisfied(clue, row)
         return fill_empty_with_X(row)
       end
 
-      if row_is_padded(clue.first, row)
+      if row_is_padded(clue, row)
         front_pad = []
         back_pad = []
 
