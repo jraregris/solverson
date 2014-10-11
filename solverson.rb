@@ -26,12 +26,12 @@ require 'minitest/autorun'
 
 describe Solverson do
   describe 'zero dimensional puzzles' do
-    it 'should solve the simplest puzzle' do
+    it '0[ ] -> [X]' do
       puzzle = [[0], [:blank]]
       Solverson.solve_row(puzzle).must_equal [:cross]
     end
 
-    it 'should solve 1| | -> |O|' do
+    it '1[ ] -> [O]' do
       puzzle = [[1],[:blank]]
       Solverson.solve_row(puzzle).must_equal [:fill]
     end
