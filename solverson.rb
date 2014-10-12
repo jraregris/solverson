@@ -1,4 +1,14 @@
+require 'pry'
+
 class Solverson
+
+  def self.solve_grid puzzle
+    puzzle.grid.each_with_index do
+      |row, index|
+      puzzle.grid[index] = self.solve_clue_and_row(puzzle.x_clues[index],row)
+    end
+  end
+
   def self.solve_row puzzle  
     clue, row = puzzle
     self.solve_clue_and_row(clue, row)
@@ -62,10 +72,27 @@ class Solverson
   end
 end
 
+class Puzzle
+  attr_accessor :grid, :x_clues
+
+  def initialize x_clues, y_clues
+    @grid = init_grid(x_clues, y_clues)
+    @x_clues = x_clues
+  end
+
+  def init_grid x_clues, y_clues
+    grid = []
+    x_clues.length.times do 
+      grid << Array.new(y_clues.length,:_)
+    end
+    grid
+  end
+end
+
 require 'minitest/autorun'
 
 describe Solverson do
-  describe 'zero dimensional puzzles' do
+  describe 'cells' do
     it '0[ ] -> [X]' do
       puzzle = [[0], [:_]]
       Solverson.solve_row(puzzle).must_equal [:X]
@@ -77,7 +104,7 @@ describe Solverson do
     end
   end
 
-  describe 'one dimensional puzzles' do
+  describe 'rows' do
     it '0[ | ] -> [X|X]' do
       puzzle = [[0], [:_, :_]]
       Solverson.solve_row(puzzle).must_equal [:X, :X]
@@ -96,6 +123,17 @@ describe Solverson do
     it '1[X| |X] -> [X|O|X]' do
       puzzle = [[1], [:X, :_, :X]]
       Solverson.solve_row(puzzle).must_equal [:X, :O, :X]
+    end
+  end
+
+  describe 'grids' do
+    it '
+          1 1 1 1 1   
+        5[ | | | | ] -> [O|O|O|O|O] ' do
+
+      puzzle = Puzzle.new([[5]],[[1],[1],[1],[1],[1]])
+      Solverson.solve_grid(puzzle).must_equal [[:O, :O, :O, :O, :O]]
+
     end
   end
 end
