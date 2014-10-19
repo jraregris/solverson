@@ -10,9 +10,19 @@ class Puzzle
   def init_grid x_clues, y_clues
     grid = []
     x_clues.length.times do 
-      grid << Array.new(y_clues.length,:_)
+      grid << Row.new(y_clues.length,:_)
     end
 
     grid
+  end
+end
+
+class Row < Array
+  def fill_X
+    fill :X
+  end
+
+  def fill_O
+    fill :O
   end
 end

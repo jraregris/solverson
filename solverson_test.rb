@@ -8,13 +8,13 @@ require './solverson.rb'
 describe Solverson do
   describe 'cells' do
     it '0[ ] -> [X]' do
-      puzzle = [[0], [:_]]
+      puzzle = [[0], Row.new([:_])]
       solver = Solverson.new
       solver.solve_row(puzzle).must_equal [:X]
     end
 
     it '1[ ] -> [O]' do
-      puzzle = [[1],[:_]]
+      puzzle = [[1], Row.new([:_])]
       solver = Solverson.new
       solver.solve_row(puzzle).must_equal [:O]
     end
@@ -22,13 +22,13 @@ describe Solverson do
 
   describe 'rows' do
     it '0[ | ] -> [X|X]' do
-      puzzle = [[0], [:_, :_]]
+      puzzle = [[0], Row.new([:_, :_])]
       solver = Solverson.new
       solver.solve_row(puzzle).must_equal [:X, :X]
     end
     
     it '2[ | ] -> [O|O]' do
-      puzzle = [[2],[:_,:_]]
+      puzzle = [[2], Row.new([:_,:_])]
       solver = Solverson.new
       solver.solve_row(puzzle).must_equal [:O, :O]
     end
@@ -40,7 +40,7 @@ describe Solverson do
     end
 
     it '1[X| |X] -> [X|O|X]' do
-      puzzle = [[1], [:X, :_, :X]]
+      puzzle = [[1], Row.new([:X, :_, :X])]
       solver = Solverson.new
       solver.solve_row(puzzle).must_equal [:X, :O, :X]
     end
