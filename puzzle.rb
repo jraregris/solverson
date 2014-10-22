@@ -25,4 +25,17 @@ class Row < Array
   def fill_O
     fill :O
   end
+
+  def to_s
+    map do |c|
+      case c
+      when :O
+        '█'
+      when :X
+        '░'
+      when :_
+        ' '
+      end
+    end.join
+  end
 end
